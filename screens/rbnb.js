@@ -111,6 +111,13 @@ class rbnb extends Component {
             color="#19AC52"
           />
         </View>
+        <View style={styles.btnText}>
+          <Button
+              title='Liste des RBNB'
+              onPress={() => this.props.navigation.navigate('rbnbUpdate')}
+              color="#19AC52"
+            />
+        </View>
       </ScrollView>
     );
   }

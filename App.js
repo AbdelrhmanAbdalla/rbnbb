@@ -20,6 +20,7 @@ import * as firebase from 'firebase';
 import firestore from 'firebase/firestore'
 import rbnb from './screens/rbnb';
 import rbnbDetails from './screens/rbnbDetail';
+import rbnbUpdate from './screens/rbnbUpdate';
 
 if (!global.btoa) { global.btoa = encode }
 if (!global.atob) { global.atob = decode }
@@ -119,6 +120,7 @@ const AppNavigator = createStackNavigator(
         Rbnb: {screen: rbnb, navigationOptions: {headerShown: false}},
         rbnbDetails: {screen: rbnbDetails, navigationOptions: {headerShown: false}},
         Details: {screen: Details, navigationOptions: {headerShown: false}},
+        rbnbUpdate: {screen: rbnbUpdate, navigationOptions: {headerShown: false}},
     },
     {
         initialRouteName: 'Splash'
