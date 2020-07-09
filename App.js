@@ -19,6 +19,7 @@ import Login from "./screens/Login";
 import * as firebase from 'firebase';
 import firestore from 'firebase/firestore'
 import rbnb from './screens/rbnb';
+import rbnbDetails from './screens/rbnbDetail';
 
 if (!global.btoa) { global.btoa = encode }
 if (!global.atob) { global.atob = decode }
@@ -80,7 +81,7 @@ const BottomNavigator = createBottomTabNavigator(
             navigationOptions: () => ({
                 tabBarIcon: ({tintColor}) => (
                     <Icon
-                        name={"rbnb"}
+                        name={"bed"}
                         color={tintColor}
                         size={24}
                     />
@@ -116,6 +117,7 @@ const AppNavigator = createStackNavigator(
         Login: {screen: Login, navigationOptions: {headerShown: false}},
         Home: {screen: BottomNavigator, navigationOptions: {headerShown: false}},
         Rbnb: {screen: rbnb, navigationOptions: {headerShown: false}},
+        rbnbDetails: {screen: rbnbDetails, navigationOptions: {headerShown: false}},
         Details: {screen: Details, navigationOptions: {headerShown: false}},
     },
     {

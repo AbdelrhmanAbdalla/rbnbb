@@ -4,21 +4,27 @@ import {
     Text,
     StyleSheet,
     ScrollView,
-    FlatList
+    FlatList,
+    Image,
+    Button
+    
 } from 'react-native';
+
 import Title from "../components/Title";
 import EventBox from "../components/EventBox";
 import EventsService from "../services/events.service";
+import * as firebase from 'firebase';
 
 class Home extends Component{
 
     constructor(props) {
         super(props);
-
+        this.firestoreRef = firebase.firestore().collection('rbnbs');
         this.state = {
             apartmentList: [],
             cheapApartment: [],
-            apartFor2: []
+            apartFor2: [],
+            rbnbArr: []
         }
     }
 
@@ -27,7 +33,25 @@ class Home extends Component{
         let cheapApartment = await EventsService.getCheapApartment();
         let apartFor2 = await EventsService.getApartmentFor2();
         this.setState({apartmentList, cheapApartment, apartFor2});
+        this.rbnbs = this.firestoreRef.onSnapshot(this.getCollection);
     }
+
+    getCollection = (querySnapshot) => {
+        const rbnbArr = [];
+        querySnapshot.forEach((res) => {
+          const { name, description, imgSource } = res.data();
+          rbnbArr.push({
+            key: res.id,
+            res,
+            name,
+            description,
+            imgSource,
+          });
+        });
+        this.setState({
+          rbnbArr,
+       });
+      }
 
     render() {
 
@@ -38,7 +62,7 @@ class Home extends Component{
             <View style={{ flex: 1 }}>
                 <ScrollView style={styles.container}>
 
-                    <Title title={"Liste des appartements"}/>
+                    <Title title={"Appartements à bas prix"}/>
 
                     <FlatList
                         data={apartmentList}
@@ -48,7 +72,28 @@ class Home extends Component{
                         keyExtractor={item => item.id}
                         renderItem={({item}) => <EventBox navigation={navigation} data={item.fields} horizontal={true}/>} />
 
-                    <Title title={"Appartements à bas prix"}/>
+                    <Title title={"Liste de vos appartements"}/>
+
+                     {
+                        this.state.rbnbArr.map((item, i) => {
+                        return (
+                            <View  style={styles.view}>
+                               <Title title={item.name}
+                               />
+                               
+                               <Text> Description : **{item.description}**</Text>
+                               <Button 
+                                title="Details"
+                                onPress={()=>{
+                                    this.props.navigation.navigate('rbnbDetails', {
+                                        rbnbkey: item.key
+                                    })
+                                }}
+                                />
+                            </View>
+                        );
+                        })
+                    }
 
                     <FlatList
                         data={cheapApartment}
@@ -67,8 +112,8 @@ class Home extends Component{
                         backgroundColor={"#FFF"}
                         keyExtractor={item => item.id}
                         renderItem={({item}) => <EventBox navigation={navigation} data={item.fields} horizontal={true}/>} />
-                    </ScrollView>
-                </View>
+                </ScrollView>
+            </View>
         )
     }
 
@@ -81,5 +126,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#FFF",
         paddingTop: 70
+    },
+    view: {
+        flex:1,
+        backgroundColor: "#FFF",
+        padding:10,
     }
 });
