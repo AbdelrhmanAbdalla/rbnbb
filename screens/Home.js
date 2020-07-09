@@ -79,7 +79,7 @@ class Home extends Component{
                         return (
                             <View  style={styles.view}>
                                <Title title={item.name}
-                               />
+                               /> 
                                
                                <Text> Description : **{item.description}**</Text>
                                <Button 
